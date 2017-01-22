@@ -2077,7 +2077,7 @@ def useBridges(ch,o):
 	'''this adds bridges to chunks, takes the bridge-objects group and uses the curves inside it as bridges.'''
 	bridgegroupname=o.bridges_group_name
 	bridgegroup=bpy.data.groups[bridgegroupname]
-	if len(bridgegroup.objects)>0:
+	if len(bridgegroup.objects) > 0 and len(ch.points) > 0:
 		
 
 		#get bridgepoly
@@ -2951,6 +2951,9 @@ def getPath3axis(context, operation):
 		if (o.movement_type=='CLIMB' and o.spindle_rotation_direction=='CW') or (o.movement_type=='CONVENTIONAL' and o.spindle_rotation_direction=='CCW'):
 			for ch in chunks:
 				ch.points.reverse()
+		if o.use_bridges:
+			for chunk in chunks:
+				useBridges(chunk,o)
 		chunksToMesh(chunks,o)
 		
 		
