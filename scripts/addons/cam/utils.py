@@ -1811,7 +1811,10 @@ def getAmbient(o):
 				#	o.limit_poly+=p
 				if o.ambient_cutter_restrict:
 					o.limit_poly = o.limit_poly.buffer(o.cutter_diameter/2,resolution = o.circle_detail)
-			o.ambient = o.ambient.intersection(o.limit_poly)
+				if o.limit_curve_invert:
+					o.ambient = o.ambient.difference(o.limit_poly)
+				else:
+					o.ambient = o.ambient.intersection(o.limit_poly)
 	o.update_ambient_tag=False
 	
 def getObjectOutline(radius,o,Offset):#FIXME: make this one operation independent
