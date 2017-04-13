@@ -3381,7 +3381,7 @@ def getPath(context,operation):#should do all path calculations.
 
 	operation.changed=False
 	t1=time.clock()-t 
-	progress('total time',t1)
+	progress('total time %.3f seconds' % (t1))
 
 def reload_paths(o):
 	oname = "cam_path_"+o.name
