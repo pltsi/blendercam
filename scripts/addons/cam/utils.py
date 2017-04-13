@@ -2087,7 +2087,7 @@ def useBridges(ch,o):
 		getBridgesPoly(o)
 		
 		####
-		bridgeheight=min(0,o.min.z+o.bridges_height)
+		bridgeheight=min(o.max.z,o.min.z+o.bridges_height)
 		vi=0
 		#shapelyToCurve('test',bridgespoly,0)
 		newpoints=[]
@@ -2292,7 +2292,7 @@ def strategy_cutout( o ):
 	if o.use_bridges:#add bridges to chunks
 		#bridges=getBridges(p,o)
 		print('using bridges')
-		bridgeheight=min(0,o.min.z+o.bridges_height)
+		bridgeheight=min(o.max.z,o.min.z+o.bridges_height)
 		for chl in extendorder:
 			chunk=chl[0]
 			layer=chl[1]
