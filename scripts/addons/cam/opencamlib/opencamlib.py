@@ -95,36 +95,27 @@ def exportModelsToSTL(operation):
 		bpy.ops.export_mesh.stl(check_existing=True, filepath=file_name, filter_glob="*.stl", use_selection=True, ascii=False, use_mesh_modifiers=True, axis_forward='Y', axis_up='Z', global_scale=1.0)
 		bpy.ops.object.delete()
 		file_number += 1
-	
+
 def oclSamplePoints(operation, points):
 	print(os.path.join(tempfile.gettempdir(), "oclSamplePoints\n"))
 	operationSettingsToCSV(operation)
 	pointsToCSV(operation, points)
 	exportModelsToSTL(operation)
-	if os.path.isdir(os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib")):
-		call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
-	else:
-		call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
+	call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
 	pointSamplesFromCSV(points)
 
 def oclSample(operation, chunks):
 	operationSettingsToCSV(operation)
 	chunkPointsToCSV(operation, chunks)
 	exportModelsToSTL(operation)
-	if os.path.isdir(os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib")):
-		call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
-	else:
-		call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
+	call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
 	chunkPointSamplesFromCSV(chunks)
 
 def oclResampleChunks(operation, chunks_to_resample):
 	operationSettingsToCSV(operation)
 	resampleChunkPointsToCSV(operation, chunks_to_resample)
 	#exportModelsToSTL(operation)
-	if os.path.isdir(os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib")):
-		call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
-	else:
-		call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
+	call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclSample.py")])
 	chunkPointsResampleFromCSV(chunks_to_resample)
 def oclWaterlineLayerHeights( operation ):
 	layers = []
@@ -172,10 +163,7 @@ def oclGetWaterline(operation, chunks):
 	oclWaterlineHeightsToCSV( operation )
 	operationSettingsToCSV( operation )
 	exportModelsToSTL( operation )
-	if os.path.isdir(os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib")):
-		call([ os.path.join(PYTHON_BIN, bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclWaterline.py")])
-	else:
-		call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclWaterline.py")])
+	call([ PYTHON_BIN, os.path.join(bpy.utils.script_path_pref(), "addons", "cam", "opencamlib", "oclWaterline.py")])
 	waterlineChunksFromCSV( operation, chunks )
 
 #def oclFillMedialAxis(operation):
