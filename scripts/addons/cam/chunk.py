@@ -565,24 +565,47 @@ def optimizeChunk(chunk,operation):
 		'''
 	return chunk			
 	
-def limitChunks(chunks,o, force=False):#TODO: this should at least add point on area border... but shouldn't be needed at all at the first place...
+def limitChunks(chunks,o, force=False):
 	if o.use_limit_curve or force:
 		nchunks=[]
 		for ch in chunks:
-			prevsampled=True
 			nch=camPathChunk([])
 			nch1=nch
 			closed=True
+			chp1 = None
+			# Start line from last point (if multiple points)
+			if len(ch.points) > 1:
+				chp1 = sgeometry.Point(ch.points[-1][0], ch.points[-1][1])
 			for s in ch.points:
+				chp2 = sgeometry.Point(s[0], s[1])
 				sampled=o.ambient.contains(sgeometry.Point(s[0],s[1]))
-				if not sampled and len(nch.points)>0:
-					nch.closed=False
-					closed=False
-					nchunks.append(nch)
-					nch=camPathChunk([])
+				if not sampled:
+					int_found=False
+					if chp1:
+						l=sgeometry.LineString([chp1,chp2])
+						if l.intersects(o.ambient):
+							i = l.intersection(o.ambient)
+							if i.type == 'LineString':
+								int_found=True
+								# Add second point from LineString when outside ambient
+								nch.points.append((i.coords[1][0], i.coords[1][1], 0))
+					# Close current chunk
+					if len(nch.points)>0 or int_found:
+						nch.closed=False
+						closed=False
+						nchunks.append(nch)
+						nch=camPathChunk([])
 				elif sampled:
+					if chp1:
+						l=sgeometry.LineString([chp1,chp2])
+						if l.intersects(o.ambient):
+							i = l.intersection(o.ambient)
+							if i.type == 'LineString':
+								# Add first point from LineString when inside ambient
+								nch.points.append((i.coords[0][0], i.coords[0][1], 0))
 					nch.points.append(s)
-				prevsampled=sampled
+				# Continus checking intersections from current point
+				chp1 = chp2
 			if len(nch.points)>2 and closed and ch.closed and ch.points[0]==ch.points[1]:
 				nch.closed=True
 			elif ch.closed and nch!=nch1 and len(nch.points)>1 and nch.points[-1]==nch1.points[0]:#here adds beginning of closed chunk to the end, if the chunks were split during limiting
@@ -603,7 +626,7 @@ def parentChildPoly(parents,children,o):
 		#print(parent.poly)
 		for child in children:
 			#print(child.poly)
-			if child!=parent:# and len(child.poly)>0
+			if not child.poly.is_empty and child!=parent:
 				if parent.poly.contains(sgeometry.Point(child.poly.boundary.coords[0])):
 					parent.children.append(child)
 					child.parents.append(parent)
