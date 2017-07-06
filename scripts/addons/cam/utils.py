@@ -2215,6 +2215,7 @@ def getLayers(operation, startdepth, enddepth):
 def strategy_cutout( o ):
 	#ob=bpy.context.active_object
 	print('operation: cutout')
+	getAmbient(o)
 	offset=True
 	if o.cut_type=='ONLINE' and o.onlycurves==True:#is separate to allow open curves :)
 		print('separate')
