@@ -915,10 +915,7 @@ def chunksToMesh(chunks,o):
 	if o.machine_axes=='3':
 		if m.use_position_definitions:
 			origin=(m.starting_position.x, m.starting_position.y, m.starting_position.z)# dhull
-		else:
-			origin=(0,0,free_movement_height)	 
-		
-		verts = [origin]
+			verts.append(origin)
 	if o.machine_axes!='3':
 		verts_rotations=[]#(0,0,0)
 	if (o.machine_axes == '5' and o.strategy5axis=='INDEXED') or (o.machine_axes=='4' and o.strategy4axis=='INDEXED'):
