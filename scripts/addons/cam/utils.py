@@ -2581,6 +2581,7 @@ def strategy_pocket( o ):
 		
 def strategy_drill( o ):
 	print('operation: Drill')
+	getAmbient(o)
 	chunks=[]
 	for ob in o.objects:
 		activate(ob)
@@ -2636,7 +2637,7 @@ def strategy_drill( o ):
 			for v in ob.data.vertices:
 				chunks.append(camPathChunk([(v.co.x+l.x,v.co.y+l.y,v.co.z+l.z)]))
 		delob(ob)#delete temporary object with applied transforms
-
+	chunks = limitChunks(chunks, o)
 	layers = getLayers(o, o.maxz, o.min.z)
 
 	chunklayers = []
